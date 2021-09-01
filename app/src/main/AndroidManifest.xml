@@ -25,10 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bluetooth">
         <activity
-            android:name=".MainActivity"
+            android:name=".BluetoothScanActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Bluetooth">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
