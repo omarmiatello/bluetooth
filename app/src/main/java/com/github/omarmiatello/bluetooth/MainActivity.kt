@@ -24,17 +24,17 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.BLUETOOTH_SCAN,
     )
 
-    private val askPermissions = registerForActivityResult(HolderForActivity(
+    private val askPermissions = registerForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions(),
         onInvoke = { it.launch(permissionsRequired) },
         callback = { if (it.all { it.value }) enableBluetooth() }
-    ))
+    )
 
-    private val enableBluetooth = registerForActivityResult(HolderForActivity(
+    private val enableBluetooth = registerForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onInvoke = { it.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)) },
         callback = { mainViewModel.scanLeDevice(this) }
-    ))
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,20 +45,17 @@ class MainActivity : ComponentActivity() {
             MainTheme {
                 Column {
                     val isBTEnabled by mainViewModel.isBTEnabled.collectAsState()
-                    val btList by mainViewModel.btList.collectAsState()
                     if (!isBTEnabled) {
-                        Button(onClick = { enableBluetooth() }) {
+                        Button(onClick = { askPermissions() }) {
                             Text(text = "Enable Bluetooth")
                         }
-                    } else {
-                        Text(text = "Bluetooth enabled")
                     }
-                    if (btList.isEmpty()) {
-                        Text(text = "No devices found")
-                    }
+
+                    val btList by mainViewModel.btList.collectAsState()
+                    if (btList.isEmpty()) Text(text = "No devices found")
                     LazyColumn {
                         items(btList) {
-                            Text("${it.name} | ${it.address} | ${it.uuids}")
+                            Text(text = "${it.name} | ${it.address} | ${it.uuids}")
                         }
                     }
                 }

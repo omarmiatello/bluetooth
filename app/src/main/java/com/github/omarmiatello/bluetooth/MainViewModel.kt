@@ -14,7 +14,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-
 class MainViewModel : ViewModel() {
     val isBTEnabled = MutableStateFlow(false)
     val btList = MutableStateFlow<List<BluetoothDevice>>(emptyList())
@@ -34,18 +33,13 @@ class MainViewModel : ViewModel() {
                 btList.value = (btList.value + results.orEmpty().map { it.device }).distinct()
             }
         }
-        val settings = ScanSettings.Builder().setReportDelay(1000)
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
 
         val bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
-        println("scanLeDevice")
         viewModelScope.launch {
             while (true) {
-                bluetoothLeScanner.startScan(null, settings, leScanCallback)
-                println("startScan")
+                bluetoothLeScanner.startScan(leScanCallback)
                 delay(10000)
                 bluetoothLeScanner.stopScan(leScanCallback)
-                println("stopScan")
                 delay(10000)
             }
         }
