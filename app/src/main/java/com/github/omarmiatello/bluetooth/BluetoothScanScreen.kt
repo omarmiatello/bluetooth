@@ -27,7 +27,9 @@ fun BluetoothScanScreen(
                     items(btList) {
                         BluetoothItem(
                             device = it,
-                            onClick = { }
+                            onClick = {
+                                vm.connect(device = it.obj)
+                            }
                         )
                     }
                 }

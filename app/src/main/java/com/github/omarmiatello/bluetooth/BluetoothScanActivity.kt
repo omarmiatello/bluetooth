@@ -37,7 +37,6 @@ class BluetoothScanActivity : ComponentActivity() {
             )
         }
 
-        vm.setupBluetoothAdapter(this)
         askPermissions()
     }
 }
